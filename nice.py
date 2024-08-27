@@ -31,11 +31,11 @@ def main():
                 response = completion.choices[0].message
                 
                 # Display the response
-                st.success("Submission successful!")
-                st.subheader("Response:")
+                st.success("Elküldve!")
+                st.subheader("Javaslat:")
                 st.write(response.content)
             except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
+                st.error(f"Hiba történt: {str(e)}")
         else:
             st.warning("Nincs hibaüzenet hozzáadva.")
 
