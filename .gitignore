@@ -1,0 +1,4 @@
+*.ipynb
+Requestek/
+*.csv
+*.jsonl
