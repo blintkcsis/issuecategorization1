@@ -55,9 +55,8 @@ def main():
                         response_counts[resp] = response_counts.get(resp, 0) + 1
                     
                     # Find the most common response
-                    most_common = max(response_counts, key=response_counts.get)
+                    answer = max(response_counts, key=response_counts.get)
                     
-                    answer = response
                 else:
                     response = client.chat.completions.create(
                     model=selected_model,
