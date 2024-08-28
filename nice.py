@@ -13,11 +13,12 @@ def main():
 
     # Dropdown for model selection
     model_options = {
-        "Legjobb":"ft:gpt-4o-2024-08-06:ef-hackathon-london-5::A1BaEBWI",
-        "Kicsi":"ft:gpt-4o-mini-2024-07-18:ef-hackathon-london-5::A1BLqEIV" ,
-        "Régi":"ft:gpt-4o-2024-08-06:ef-hackathon-london-5::A0tGlKOA"
+        "Legjobb": "ft:gpt-4o-2024-08-06:ef-hackathon-london-5::A1BaEBWI",
+        "Kicsi": "ft:gpt-4o-mini-2024-07-18:ef-hackathon-london-5::A1BLqEIV",
+        "Régi": "ft:gpt-4o-2024-08-06:ef-hackathon-london-5::A0tGlKOA"
     }
-    selected_model = st.selectbox("Válassz kategorizálót:", model_options)
+    selected_label = st.selectbox("Válassz kategorizálót:", list(model_options.keys()))
+    selected_model = model_options[selected_label]
 
     # Text input
     user_input = st.text_area("Hiba üzenet:", height=200)
@@ -29,12 +30,11 @@ def main():
                 completion = client.chat.completions.create(
                     model=selected_model,
                     messages=[
-                        {"role": "system", "content": "A feladata hogy eldöntse a hibabejelentés alapján a kategóriát és bejelentési osztályt."},
+                        {"role": "system", "content": "A feladata hogy eldöntse a hibabejelentés alapján a bejelentési osztályt. Semmi mást."},
                         {"role": "user", "content": user_input}
                     ],
                 )
                 response = completion.choices[0].message
-                
                 # Display the response
                 st.success("Elküldve!")
                 st.subheader("Javaslat:")
