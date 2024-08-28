@@ -21,8 +21,6 @@ def main():
         selected_label = st.selectbox("Válassz kategorizálót:", list(model_options.keys()))
         selected_model = model_options[selected_label]
 
-        # Confidence threshold slider
-        confidence_threshold = st.slider("Magabiztosság jelzés minimum (%)", min_value=0, max_value=100, value=60, step=1)
         n = st.slider("Minta méret", min_value=5, max_value=50, step=5, value=20)
 
     # Text input
@@ -59,13 +57,6 @@ def main():
                     # Find the most common response
                     most_common = max(response_counts, key=response_counts.get)
                     
-                    # Check if the most common response occurs at least the threshold number of times
-                    if response_counts[most_common] >= int(confidence_threshold/100*n):
-                        response = most_common
-                    else:
-                        st.error(f"{int(response_counts[most_common]*100/n)}% confidence")
-                        
-                        response = most_common
                     answer = response
                 else:
                     response = client.chat.completions.create(
