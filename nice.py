@@ -10,7 +10,7 @@ def main():
     api_key = os.getenv('API_KEY')
     client = OpenAI(api_key=api_key)
     st.title("Bee wise kategorizálás")
-
+    n=20
     # Settings dropdown
     with st.expander("Beállítások"):
         # Dropdown for model selection
@@ -23,7 +23,7 @@ def main():
         selected_model = model_options[selected_label]
 
         # Confidence threshold slider
-        confidence_threshold = st.slider("Magabiztosság minimum (%)", min_value=0, max_value=100, value=60, step=1)
+        confidence_threshold = st.slider("Magabiztosság jelzés minimum (%)", min_value=0, max_value=100, value=60, step=1)
 
     # Text input
     user_input = st.text_area("Hiba üzenet:", height=200)
@@ -46,7 +46,7 @@ def main():
                         {"role": "system", "content": "Válassz a következő listából: 'Damage repair activity', 'Electrical issue', 'Heating equipment', 'Water supply, wastewater management', 'Refrigeration equipment', 'Elevators', 'Windows and doors', 'Restrooms', 'Master builder (skilled trades) works', 'Move management, freight transport', 'Havaria', 'Catering areas', 'Furniture repair', 'Comfort improvement', 'Outdoor Maintenance ', 'Energy development', 'Havária - Víz és csatorna', 'Pest control', 'Occasional cleaning', 'Havaria - Electric', 'Havaria - Trailers', 'Havaria - Other emergency', 'Havaria - Garden and landscaping', 'Equipment replacement', 'Hygiene consumables', 'Other improvements', 'Support And Transport Activities', 'Carrying out design, expert and technical inspection tasks', 'Air conditioning and air handling equipment', 'Ceiling', 'Outdoor maintenance', 'Damage rescue, asset protection', 'Energy services', 'Caretaking', 'Main part replacement', 'Rationalization', 'Low-current services'"},
                             
                     ],
-                    n=10
+                    n=n
                     )
 
                     responses = [choice.message.content for choice in completion.choices]
@@ -59,13 +59,13 @@ def main():
                     # Find the most common response
                     most_common = max(response_counts, key=response_counts.get)
                     
-                    # Check if the most common response occurs at least 6 times
-                    if response_counts[most_common] >= int(confidence_threshold/10):
+                    # Check if the most common response occurs at least the threshold number of times
+                    if response_counts[most_common] >= int(confidence_threshold/100*n):
                         response = most_common
                     else:
-                        st.error("Nem vagyok biztos a válaszban")
+                        st.error(f"{int(response_counts[most_common]*100/n)}% confidence")
+                        
                         response = most_common
-
                     answer = response
                 else:
                     response = client.chat.completions.create(
@@ -79,13 +79,18 @@ def main():
                     n=1
                     )
                     answer = response.choices[0].message.content
+                    
 
                 
 
 
                 
-                st.subheader("Javaslat:")
-                st.write(answer)
+                st.subheader(answer)
+                
+                with st.expander("Alternatív"):
+                    sorted_counts = sorted(response_counts.items(), key=lambda x: x[1], reverse=True)
+                    for resp, count in sorted_counts:
+                        st.write(f"{resp}: {int(count*100/n)}%")
                 
             except Exception as e:
                 st.error(f"Hiba történt: {str(e)}")
