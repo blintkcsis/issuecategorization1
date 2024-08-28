@@ -83,8 +83,7 @@ def main():
                 
 
 
-                # Display the response
-                st.success("Elküldve!")
+                
                 st.subheader("Javaslat:")
                 st.write(answer)
                 
