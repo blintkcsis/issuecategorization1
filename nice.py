@@ -10,7 +10,6 @@ def main():
     api_key = os.getenv('API_KEY')
     client = OpenAI(api_key=api_key)
     st.title("Bee wise kategorizálás")
-    n=20
     # Settings dropdown
     with st.expander("Beállítások"):
         # Dropdown for model selection
@@ -24,6 +23,7 @@ def main():
 
         # Confidence threshold slider
         confidence_threshold = st.slider("Magabiztosság jelzés minimum (%)", min_value=0, max_value=100, value=60, step=1)
+        n = st.slider("Minta méret", min_value=5, max_value=50, step=5, value=20)
 
     # Text input
     user_input = st.text_area("Hiba üzenet:", height=200)
