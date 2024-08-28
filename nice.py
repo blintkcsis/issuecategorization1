@@ -75,7 +75,7 @@ def main():
 
 
                 
-                st.subheader(f"{answer} ({int(response_counts[most_common]*100/n)}%)")
+                st.subheader(f"{answer} ({int(response_counts[answer]*100/n)}%)")
                 
                 with st.expander("Alternatív"):
                     sorted_counts = sorted(response_counts.items(), key=lambda x: x[1], reverse=True)
